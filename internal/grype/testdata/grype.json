@@ -1,0 +1,111 @@
+{
+  "matches": [
+    {
+      "vulnerability": {
+        "id": "CVE-2021-23337",
+        "dataSource": "https://nvd.nist.gov/vuln/detail/CVE-2021-23337",
+        "namespace": "nvd:cpe",
+        "severity": "High",
+        "urls": ["https://nvd.nist.gov/vuln/detail/CVE-2021-23337"],
+        "description": "Lodash versions prior to 4.17.21 are vulnerable to Command Injection via the template function.",
+        "cvss": [
+          {"source": "nvd@nist.gov", "type": "Primary", "version": "3.1", "vector": "CVSS:3.1/AV:N/AC:L/PR:H/UI:N/S:U/C:H/I:H/A:H", "metrics": {"baseScore": 7.2}},
+          {"source": "nvd@nist.gov", "type": "Primary", "version": "2.0", "vector": "AV:N/AC:L/Au:S/C:P/I:P/A:P", "metrics": {"baseScore": 6.5}}
+        ],
+        "epss": [{"cve": "CVE-2021-23337", "epss": 0.0041, "percentile": 0.72, "date": "2026-10-20"}],
+        "fix": {"versions": ["4.17.21"], "state": "fixed"},
+        "advisories": [],
+        "risk": 2.9
+      },
+      "relatedVulnerabilities": [
+        {"id": "GHSA-35jh-r3h4-6jhm", "dataSource": "https://github.com/advisories/GHSA-35jh-r3h4-6jhm", "namespace": "github:language:javascript", "severity": "High", "urls": [], "cvss": []}
+      ],
+      "matchDetails": [
+        {"type": "exact-direct-match", "matcher": "javascript-matcher", "fix": {"suggestedVersion": "4.17.21"}}
+      ],
+      "artifact": {
+        "id": "a1", "name": "lodash", "version": "4.17.20", "type": "npm",
+        "locations": [{"path": "/package-lock.json"}], "language": "javascript",
+        "purl": "pkg:npm/lodash@4.17.20"
+      }
+    },
+    {
+      "vulnerability": {
+        "id": "CVE-2021-44906",
+        "dataSource": "https://nvd.nist.gov/vuln/detail/CVE-2021-44906",
+        "namespace": "nvd:cpe",
+        "severity": "Critical",
+        "urls": ["https://nvd.nist.gov/vuln/detail/CVE-2021-44906"],
+        "description": "Minimist <=1.2.5 is vulnerable to Prototype Pollution via file index.js, function setKey().",
+        "cvss": [
+          {"source": "nvd@nist.gov", "type": "Primary", "version": "3.1", "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H", "metrics": {"baseScore": 9.8}}
+        ],
+        "epss": [{"cve": "CVE-2021-44906", "epss": 0.0152, "percentile": 0.87, "date": "2026-10-20"}],
+        "fix": {"versions": ["1.2.6"], "state": "fixed"},
+        "advisories": [],
+        "risk": 5.1
+      },
+      "relatedVulnerabilities": [],
+      "matchDetails": [{"type": "exact-direct-match", "matcher": "javascript-matcher"}],
+      "artifact": {
+        "id": "a2", "name": "minimist", "version": "1.2.5", "type": "npm",
+        "locations": [{"path": "/package-lock.json"}], "language": "javascript",
+        "purl": "pkg:npm/minimist@1.2.5"
+      }
+    },
+    {
+      "vulnerability": {
+        "id": "CVE-2024-3094",
+        "dataSource": "https://ubuntu.com/security/CVE-2024-3094",
+        "namespace": "ubuntu:distro:ubuntu:24.04",
+        "severity": "Critical",
+        "urls": ["https://ubuntu.com/security/CVE-2024-3094"],
+        "description": "Malicious code was discovered in the upstream tarballs of xz, starting with version 5.6.0.",
+        "cvss": [
+          {"source": "nvd@nist.gov", "type": "Secondary", "version": "3.1", "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H", "metrics": {"baseScore": 10.0}}
+        ],
+        "knownExploited": [{"cve": "CVE-2024-3094", "dateAdded": "2024-04-01"}],
+        "epss": [{"cve": "CVE-2024-3094", "epss": 0.3, "percentile": 0.97, "date": "2026-10-20"}],
+        "fix": {"versions": ["5.6.1+really5.4.5-1ubuntu0.1"], "state": "fixed"},
+        "advisories": [],
+        "risk": 90
+      },
+      "relatedVulnerabilities": [],
+      "matchDetails": [{"type": "exact-indirect-match", "matcher": "dpkg-matcher"}],
+      "artifact": {
+        "id": "a3", "name": "liblzma5", "version": "5.6.0-0.2", "type": "deb",
+        "locations": [{"path": "/var/lib/dpkg/status"}], "language": "",
+        "purl": "pkg:deb/ubuntu/liblzma5@5.6.0-0.2?arch=amd64&distro=ubuntu-24.04"
+      }
+    },
+    {
+      "vulnerability": {
+        "id": "GHSA-fake-nofix-0001",
+        "dataSource": "https://github.com/advisories/GHSA-fake-nofix-0001",
+        "namespace": "github:language:javascript",
+        "severity": "Medium",
+        "urls": [],
+        "description": "Regular expression denial of service in debug (no upstream fix).",
+        "cvss": [],
+        "fix": {"versions": [], "state": "not-fixed"},
+        "advisories": [],
+        "risk": 0.4
+      },
+      "relatedVulnerabilities": [],
+      "matchDetails": [{"type": "exact-direct-match", "matcher": "javascript-matcher"}],
+      "artifact": {
+        "id": "a4", "name": "debug", "version": "4.3.4", "type": "npm",
+        "locations": [{"path": "/package-lock.json"}], "language": "javascript",
+        "purl": "pkg:npm/debug@4.3.4"
+      }
+    }
+  ],
+  "source": {"type": "directory", "target": "/work/app"},
+  "distro": {"name": "ubuntu", "version": "24.04", "idLike": ["debian"]},
+  "descriptor": {
+    "name": "grype",
+    "version": "0.100.0",
+    "db": {"schemaVersion": "v6.1.0", "built": "2026-10-22T01:31:12Z", "path": "/root/.cache/grype/db/6/vulnerability.db"},
+    "timestamp": "2026-10-23T10:00:00Z"
+  }
+}

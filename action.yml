@@ -1,0 +1,68 @@
+name: vuln-check
+description: Scan dependencies and OS packages with grype, prioritised for action. Fails the job above a score threshold and can upload SARIF.
+author: malpr0
+branding:
+  icon: shield
+  color: red
+
+inputs:
+  target:
+    description: Path, image ref or sbom:file to scan
+    default: "."
+  fail-above:
+    description: Fail when any finding scores above this (0-100). -1 disables.
+    default: "69"
+  osv:
+    description: Enable the OSV freshness overlay (sends the dependency list to api.osv.dev)
+    default: "true"
+  sarif:
+    description: Write SARIF to this path (upload it with github/codeql-action/upload-sarif)
+    default: ""
+  version:
+    description: vuln-check release to use (tag without v), or "latest"
+    default: "latest"
+
+outputs:
+  status:
+    description: CLEAN, REVIEW or ACTION_REQUIRED
+    value: ${{ steps.scan.outputs.status }}
+  report:
+    description: Path to the agent-format JSON report
+    value: ${{ steps.scan.outputs.report }}
+
+runs:
+  using: composite
+  steps:
+    - uses: anchore/scan-action/download-grype@v6
+      id: grype
+
+    - shell: bash
+      run: |
+        set -euo pipefail
+        repo=ciloops/vuln-check
+        ver="${{ inputs.version }}"
+        if [ "$ver" = "latest" ]; then
+          ver=$(curl -fsSL "https://api.github.com/repos/$repo/releases/latest" | sed -n 's/.*"tag_name": *"v\([^"]*\)".*/\1/p')
+        fi
+        os=$(uname -s | tr '[:upper:]' '[:lower:]'); arch=$(uname -m)
+        case "$arch" in x86_64) arch=amd64;; aarch64|arm64) arch=arm64;; esac
+        mkdir -p "$RUNNER_TEMP/vuln-check"
+        curl -fsSL "https://github.com/$repo/releases/download/v${ver}/vuln-check_${ver}_${os}_${arch}.tar.gz" | tar -xz -C "$RUNNER_TEMP/vuln-check"
+        echo "$RUNNER_TEMP/vuln-check" >> "$GITHUB_PATH"
+
+    - id: scan
+      shell: bash
+      env:
+        VULN_CHECK_GRYPE: ${{ steps.grype.outputs.cmd }}
+      run: |
+        set -uo pipefail
+        args=(scan --format agent --fail-above "${{ inputs.fail-above }}")
+        [ "${{ inputs.osv }}" = "true" ] || args+=(--no-osv)
+        [ -n "${{ inputs.sarif }}" ] && args+=(--sarif-out "${{ inputs.sarif }}")
+        report="$RUNNER_TEMP/vuln-check-report.json"
+        code=0
+        vuln-check "${args[@]}" "${{ inputs.target }}" > "$report" || code=$?
+        echo "report=$report" >> "$GITHUB_OUTPUT"
+        echo "status=$(sed -n 's/.*"status":"\([A-Z_]*\)".*/\1/p' "$report")" >> "$GITHUB_OUTPUT"
+        cat "$report"
+        exit $code

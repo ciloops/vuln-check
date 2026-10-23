@@ -1,0 +1,38 @@
+{
+  "$schema": "https://static.modelcontextprotocol.io/schemas/2025-09-29/server.schema.json",
+  "name": "io.github.ciloops/vuln-check",
+  "description": "Local vulnerability scan for dependencies, SBOMs and container images on top of grype, with prioritised upgrade actions for agents.",
+  "repository": {
+    "url": "https://github.com/ciloops/vuln-check",
+    "source": "github"
+  },
+  "version": "0.1.2",
+  "packages": [
+    {
+      "registryType": "npm",
+      "registryBaseUrl": "https://registry.npmjs.org",
+      "identifier": "@ciloops/vuln-check",
+      "version": "0.1.2",
+      "transport": { "type": "stdio" },
+      "runtimeHint": "npx",
+      "packageArguments": [
+        { "type": "positional", "value": "mcp" }
+      ]
+    },
+    {
+      "registryType": "oci",
+      "registryBaseUrl": "https://ghcr.io",
+      "identifier": "ciloops/vuln-check",
+      "version": "0.1.2",
+      "transport": { "type": "stdio" },
+      "runtimeHint": "docker",
+      "runtimeArguments": [
+        { "type": "named", "name": "-v", "value": "{workdir}:/work" },
+        { "type": "named", "name": "-v", "value": "vuln-check-db:/cache" }
+      ],
+      "packageArguments": [
+        { "type": "positional", "value": "mcp" }
+      ]
+    }
+  ]
+}

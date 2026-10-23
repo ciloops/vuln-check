@@ -1,0 +1,13 @@
+{
+  "bomFormat": "CycloneDX",
+  "specVersion": "1.6",
+  "components": [
+    {"type": "library", "name": "lodash", "version": "4.17.20", "purl": "pkg:npm/lodash@4.17.20"},
+    {"type": "library", "name": "minimist", "version": "1.2.5", "purl": "pkg:npm/minimist@1.2.5"},
+    {"type": "library", "name": "debug", "version": "4.3.4", "purl": "pkg:npm/debug@4.3.4"},
+    {"type": "library", "name": "express", "version": "4.19.2", "purl": "pkg:npm/express@4.19.2"},
+    {"type": "library", "name": "liblzma5", "version": "5.6.0-0.2", "purl": "pkg:deb/ubuntu/liblzma5@5.6.0-0.2?arch=amd64&distro=ubuntu-24.04"},
+    {"type": "library", "name": "requests", "version": "2.31.0", "purl": "pkg:pypi/requests@2.31.0"},
+    {"type": "operating-system", "name": "ubuntu", "version": "24.04"}
+  ]
+}

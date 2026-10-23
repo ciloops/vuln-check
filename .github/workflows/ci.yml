@@ -1,0 +1,73 @@
+name: ci
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+  issues: write
+  id-token: write
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-go@v5
+        with:
+          go-version-file: go.mod
+      - run: go mod tidy && git diff --exit-code go.mod go.sum
+      - run: test -z "$(gofmt -l .)"
+      - run: go vet ./...
+      - run: go test -race -coverprofile=coverage.out -coverpkg=./... ./...
+      - uses: codecov/codecov-action@v5
+        with:
+          files: coverage.out
+          use_oidc: true
+      - run: go build -o /dev/null ./cmd/vuln-check
+
+  self-scan:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      security-events: write
+    steps:
+      - uses: actions/checkout@v4
+      - name: vuln-check (this repo's own action)
+        uses: ./
+        with:
+          sarif: vuln.sarif
+      - uses: github/codeql-action/upload-sarif@v3
+        if: always() && hashFiles('vuln.sarif') != ''
+        with:
+          sarif_file: vuln.sarif
+
+  e2e:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-go@v5
+        with:
+          go-version-file: go.mod
+      - uses: anchore/scan-action/download-grype@v6
+        id: grype
+      - run: go build -o vuln-check ./cmd/vuln-check
+      - run: |
+          mkdir -p e2e && cd e2e
+          npm init -y > /dev/null
+          npm install --package-lock-only --no-audit --no-fund lodash@4.17.20 > /dev/null
+          cd ..
+          "${{ steps.grype.outputs.cmd }}" version
+          VULN_CHECK_GRYPE="${{ steps.grype.outputs.cmd }}" ./vuln-check scan --no-osv --format agent e2e > out.json 2> err.txt
+          cat out.json
+          grep -q '"status":"ACTION_REQUIRED"' out.json
+          grep -q '"package":"pkg:npm/lodash","current":"4.17.20","target":"4\.' out.json
+      - if: failure()
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          { echo '## stdout'; echo '```'; head -c 20000 out.json 2>/dev/null; echo; echo '```';
+            echo '## stderr'; echo '```'; head -c 20000 err.txt 2>/dev/null; echo; echo '```'; } > /tmp/body.md
+          gh issue create --title "e2e failed on ${GITHUB_SHA::7}" --body-file /tmp/body.md --label ci

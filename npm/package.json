@@ -1,0 +1,13 @@
+{
+  "name": "@ciloops/vuln-check",
+  "version": "0.0.0",
+  "description": "Vulnerability truth for AI agents, on top of grype. Downloads the vuln-check binary for your platform.",
+  "license": "Apache-2.0",
+  "repository": { "type": "git", "url": "https://github.com/ciloops/vuln-check.git" },
+  "homepage": "https://github.com/ciloops/vuln-check",
+  "keywords": ["security", "vulnerabilities", "mcp", "grype", "sbom", "docker"],
+  "bin": { "vuln-check": "bin/vuln-check.js" },
+  "files": ["bin/vuln-check.js", "install.js", "README.md"],
+  "scripts": { "postinstall": "node install.js" },
+  "engines": { "node": ">=18" }
+}

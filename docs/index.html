@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>vuln-check: vulnerability truth for AI agents</title>
+<meta name="description" content="Runs grype locally, overlays OSV, and returns a prioritised answer with concrete upgrade targets instead of a 40 KB JSON dump.">
+<meta property="og:title" content="vuln-check">
+<meta property="og:description" content="Vulnerability truth for AI agents, on top of grype.">
+<link rel="stylesheet" href="nocturne.css">
+<style>
+  /* Tokens come from nocturne.css (Ciloops design system). */
+  :root { --warm: oklch(0.66 0.125 55); --mono: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; }
+  a { color: var(--color-accent); } a:hover { color: var(--color-accent-300); }
+  main { max-width: 760px; margin: 0 auto; padding: clamp(32px,6vw,72px) 20px 40px; }
+  header { display: flex; align-items: center; gap: 10px; margin-bottom: clamp(48px,8vw,88px); font-size: 14px; }
+  header strong { font-weight: 500; font-size: 17px; letter-spacing: -.02em; margin-right: auto; }
+  header a { color: var(--color-neutral-400); text-decoration: none; } header a:hover { color: var(--color-text); }
+  h1 { margin: 0 0 16px; font-size: clamp(30px,4.4vw,44px); font-weight: 500; letter-spacing: -.03em; line-height: 1.1; text-wrap: balance; }
+  h2 { margin: 56px 0 12px; font-size: 11px; font-weight: 500; letter-spacing: .12em; text-transform: uppercase; color: var(--color-neutral-500); }
+  p { margin: 0 0 14px; color: var(--color-neutral-400); text-wrap: pretty; }
+  .lead { font-size: 17px; color: var(--color-neutral-300); }
+  code { font: 13px var(--mono); color: var(--color-neutral-300); }
+  pre { margin: 0 0 10px; padding: 14px 16px; overflow-x: auto; border-radius: var(--radius-md); background: var(--color-surface); box-shadow: var(--shadow-sm); font: 13px/1.65 var(--mono); color: var(--color-neutral-300); }
+  .c { color: var(--color-neutral-500); } .k { color: var(--color-accent-300); } .w { color: var(--warm); }
+  dl { display: grid; grid-template-columns: max-content 1fr; gap: 8px 24px; margin: 0; font-size: 14px; }
+  dt { font-family: var(--mono); font-size: 13px; color: var(--color-text); } dd { margin: 0; color: var(--color-neutral-400); }
+  footer { margin-top: 72px; padding-top: 18px; border-top: 1px solid var(--color-divider); font-size: 12px; color: var(--color-neutral-500); }
+  footer a { color: inherit; }
+</style>
+</head>
+<body>
+<main>
+  <header>
+    <svg width="20" height="20" viewBox="0 0 64 64" aria-hidden="true"><circle cx="32" cy="32" r="22" fill="none" stroke="#9184d9" stroke-width="6" stroke-linecap="round" stroke-dasharray="110 40" transform="rotate(-20 32 32)"/><circle cx="47" cy="14" r="6" fill="oklch(0.66 0.125 55)"/></svg>
+    <strong>vuln-check</strong>
+    <a href="https://github.com/ciloops/vuln-check#readme">Docs</a>
+    <a href="https://github.com/ciloops/vuln-check/releases">Releases</a>
+    <a href="https://github.com/ciloops/vuln-check">GitHub</a>
+  </header>
+
+  <h1>Vulnerability truth for AI agents.</h1>
+  <p class="lead">Runs grype locally, overlays OSV, and returns a prioritised answer with concrete upgrade targets instead of a 40&nbsp;KB JSON dump.</p>
+
+  <h2>Install</h2>
+<pre><span class="k">brew</span> install grype
+<span class="k">go</span> install github.com/ciloops/vuln-check/cmd/vuln-check@latest
+<span class="k">vuln-check</span> scan .
+<span class="c"># or: brew install ciloops/tap/vuln-check · npx @ciloops/vuln-check scan .</span></pre>
+
+  <h2>Output</h2>
+<pre>{<span class="k">"status"</span>:<span class="w">"ACTION_REQUIRED"</span>,<span class="k">"target"</span>:"dir:.",<span class="k">"packages"</span>:412,<span class="k">"findings"</span>:17,<span class="k">"shown"</span>:5,
+ <span class="k">"actions"</span>:[{<span class="k">"package"</span>:"pkg:npm/minimist",<span class="k">"current"</span>:"1.2.5",<span class="k">"target"</span>:"1.2.6",
+              <span class="k">"breaking"</span>:false,<span class="k">"fixes"</span>:["CVE-2021-44906"],<span class="k">"score"</span>:59}],
+ <span class="k">"top"</span>:[{<span class="k">"id"</span>:"CVE-2021-44906",<span class="k">"severity"</span>:<span class="w">"CRITICAL"</span>,<span class="k">"score"</span>:59,<span class="k">"epss"</span>:0.015,<span class="k">"fixed_in"</span>:["1.2.6"]}],
+ <span class="k">"unfixable"</span>:3}</pre>
+  <dl>
+    <dt>status</dt><dd><code>CLEAN</code> (~20 tokens) · <code>REVIEW</code> (all scores &lt; 40) · <code>ACTION_REQUIRED</code></dd>
+    <dt>actions</dt><dd>Smallest version per package that closes every finding, with a <code>breaking</code> flag.</dd>
+    <dt>score</dt><dd>0–100 from CVSS, EPSS, CISA KEV and fix availability.</dd>
+    <dt>fresh</dt><dd>Advisory came from OSV before grype-db ingested it.</dd>
+  </dl>
+
+  <h2>MCP</h2>
+  <p>Tools: <code>scan_dir</code> <code>scan_image</code> <code>scan_sbom</code> <code>vuln_lookup</code> <code>db_update</code>. Claude Code, Cursor, Windsurf, VS Code, Codex.</p>
+<pre><span class="k">claude</span> mcp add vuln-check -- vuln-check mcp</pre>
+<pre>{ <span class="k">"mcpServers"</span>: { <span class="k">"vuln-check"</span>: { <span class="k">"command"</span>: "vuln-check", <span class="k">"args"</span>: ["mcp"] } } }</pre>
+
+  <h2>CI</h2>
+<pre>- <span class="k">uses</span>: ciloops/vuln-check@v1
+  <span class="k">with</span>: { <span class="k">target</span>: ., <span class="k">fail-above</span>: 69, <span class="k">sarif</span>: vuln.sarif }</pre>
+
+  <h2>Scope</h2>
+  <p>npm, PyPI, Go, Maven, Cargo, RubyGems, Composer, NuGet, Hex, Pub, Swift, R, Conan, OS packages, container images, SBOMs. Runs locally; only the optional OSV query (<code>--no-osv</code> to disable) touches the network.</p>
+
+  <footer>Apache-2.0 · <a href="https://github.com/ciloops">Ciloops</a> · built on <a href="https://github.com/anchore/grype">grype</a> and <a href="https://osv.dev">OSV</a></footer>
+</main>
+</body>
+</html>

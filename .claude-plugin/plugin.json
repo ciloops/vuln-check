@@ -1,0 +1,12 @@
+{
+  "name": "vuln-check",
+  "description": "Know which dependencies and base images are vulnerable before you touch them. Local grype scan, prioritised, with concrete upgrade targets.",
+  "version": "0.1.2",
+  "author": { "name": "malpr0", "url": "https://github.com/ciloops" },
+  "homepage": "https://github.com/ciloops/vuln-check",
+  "repository": "https://github.com/ciloops/vuln-check",
+  "license": "Apache-2.0",
+  "keywords": ["security", "vulnerabilities", "dependencies", "docker", "grype", "sbom"],
+  "mcpServers": "./.mcp.json",
+  "skills": "./skills"
+}

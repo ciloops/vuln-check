@@ -1,0 +1,9 @@
+/vuln-check
+/vuln-check.exe
+/dist/
+/npm/bin/vuln-check
+/npm/bin/vuln-check.exe
+/npm/node_modules/
+*.sarif
+sandbox.go.mod
+sandbox.go.sum

@@ -1,0 +1,8 @@
+{
+  "mcpServers": {
+    "vuln-check": {
+      "command": "vuln-check",
+      "args": ["mcp"]
+    }
+  }
+}
