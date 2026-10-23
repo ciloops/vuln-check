@@ -1,6 +1,7 @@
 {
   "name": "@ciloops/vuln-check",
   "version": "0.0.0",
+  "mcpName": "io.github.ciloops/vuln-check",
   "description": "Vulnerability truth for AI agents, on top of grype. Downloads the vuln-check binary for your platform.",
   "license": "Apache-2.0",
   "repository": { "type": "git", "url": "https://github.com/ciloops/vuln-check.git" },

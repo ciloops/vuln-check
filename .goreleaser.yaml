@@ -69,3 +69,4 @@ dockers_v2:
       org.opencontainers.image.source: https://github.com/ciloops/vuln-check
       org.opencontainers.image.version: "{{ .Version }}"
       org.opencontainers.image.licenses: Apache-2.0
+      io.modelcontextprotocol.server.name: io.github.ciloops/vuln-check
